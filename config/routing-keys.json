@@ -1,0 +1,5 @@
+{
+    "api-gateway": "api",
+    "user-service": "user",
+    "product-service": "prod"
+}

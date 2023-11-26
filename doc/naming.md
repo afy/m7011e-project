@@ -7,9 +7,9 @@ Configuration files (excluding pip requirements) should be `.json` files. <br/>
 Text files, for example docs, should be `.md` files. <br/>
 Pip requirements should be a `.txt` file. <br/>
 
-## Coding 
+# Coding 
 
-# Naming
+## Naming
 - Functions should use camel case: e.g. `onMessageRecieved`. Methods should also follow this style.
 - Variables should be lowercase, with underscores if needed: e.g. `current_iter`
 - Classes should start with a captial letter: e.g. `WebappClient`

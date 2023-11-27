@@ -6,7 +6,7 @@ template = {
     "routing-key": "",
     "function": "",
     "reply": {
-        "corr_id": "",
+        "corr-id": "",
         "reply-to": ""
     }
 }

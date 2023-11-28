@@ -1,7 +1,6 @@
 import pika
-import protocol
 import typing
-
+from . import protocol
 
 
 class PikaServer:

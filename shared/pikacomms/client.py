@@ -1,5 +1,5 @@
 import pika
-import protocol
+from . import protocol
 
 class PikaClient:
     def __init__(self):
@@ -9,13 +9,12 @@ class PikaClient:
         self.channel.queue_declare(queue='hello')
 
 
-    def send(self, key, data):  
+    def call(self, key : str, data : dict) -> dict:  
         self.channel.basic_publish(
             exchange ='',
             routing_key = key, 
             body = protocol.parseToNet(data)
         )
-        
         print(" [x] Sent " + data)
         
 

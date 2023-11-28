@@ -1,3 +1,5 @@
+# Deprecated; delete files
+
 import pika
 import uuid
 

@@ -39,3 +39,6 @@ class PikaServer:
             ch.basic_ack(delivery_tag = method.delivery_tag)
         else:
             self.onInvalidLookup()
+
+
+            

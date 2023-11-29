@@ -3,7 +3,6 @@
 import pika
 import json
 
-
 class ApiGatewayServer:
     def __init__(self):
         connection = pika.BlockingConnection(

@@ -4,6 +4,7 @@ from .models import Product
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from shared.pikacomms.APIGatewayServer import ApiGatewayServer
+from shared.pikacomms.server import PikaServer
 #from .APIGatewayServer import ApiGatewayServer
 api_gateway_server = ApiGatewayServer()
 

@@ -1,5 +1,11 @@
 from django.shortcuts import render
-from shared.pikacomms.APIGatewayServer import ApiGatewayServer
+from .server import PikaServer
+from .queries import test_create_user
 
-api_gateway_server = ApiGatewayServer()
+
+#test_create_user()
+
+#lookup = {function: 'create_blabla'}
+#pika_server = PikaServer(_lookup = lookup)
+
 # Create your views here.

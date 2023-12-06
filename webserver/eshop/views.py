@@ -25,4 +25,23 @@ def order(request):
 
 
 # Admin views
+def admin_home(request):
+    return render(request, 'pages/admin/home.html')
+
+def admin_orders(request):
+    return render(request, 'pages/admin/orders.html')
+
+def admin_products(request):
+    return render(request, 'pages/admin/products.html')
+
+def admin_reviews(request):
+    return render(request, 'pages/admin/reviews.html')
+
+def admin_users(request):
+    return render(request, 'pages/admin/users.html')
+
+
+
 # Superuser views
+def superuser_home(request):
+    return render(request, 'pages/superuser/home.html')

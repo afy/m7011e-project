@@ -1,23 +1,28 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
+# User views
 def home(request):
-    return HttpResponse("Homepage view")
+    return render(request, 'pages/user/home.html')
 
 def product(request):
-    return HttpResponse("Product view")
+    return render(request, 'pages/user/product.html')
 
 def search(request):
-    return HttpResponse("Search page")
+    return render(request, 'pages/user/search.html')
 
 def login(request):
-    return HttpResponse("Login page")
+    return render(request, 'pages/user/login.html')
 
 def account(request):
-    return HttpResponse("Account settings")
+    return render(request, 'pages/user/account.html')
 
 def cart(request):
-    return HttpResponse("Cart page")
+    return render(request, 'pages/user/cart.html')
 
 def order(request):
-    return HttpResponse("Order page")
+    return render(request, 'pages/user/order.html')
+
+
+
+# Admin views
+# Superuser views

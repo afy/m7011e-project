@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 import json
 
-from ...shared.pikacomms.client import PikaClient
+#from ...shared.pikacomms.client import PikaClient
 
 # Load routing data from config
 routing = {}

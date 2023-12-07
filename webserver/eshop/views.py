@@ -1,4 +1,5 @@
 from django.shortcuts import render
+import requests
 
 # User views
 def home(request):

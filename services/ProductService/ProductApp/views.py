@@ -11,7 +11,11 @@ from .queries import *
 def home(request):
     return HttpResponse("hello world")
 
-insert_query()
+#event_insert_query()
+
+#event_delete_query()
+
+#category_insert_query()
 
 
 

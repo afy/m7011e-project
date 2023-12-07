@@ -33,8 +33,14 @@ class Product_Discount(models.Model):
         app_label = 'ProductApp'
 
 class Category(models.Model):
-    parent_category = models.ForeignKey("self", on_delete=models.CASCADE)
+    parent_category = models.ForeignKey("self", on_delete=models.CASCADE, null = True)
     name = models.CharField(max_length=255)
+
+    @classmethod
+    def create(cls, name):
+        name = cls(name=name)
+        return name
+    
     class Meta:
         app_label = 'ProductApp'
 

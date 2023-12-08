@@ -31,15 +31,30 @@ def test_create_user():
     create_user(body)
 
 
+#Note: return both the token and the group the user belongs to(user/admin/superuser)
 def login(body: dict):
     params = body['params']
     username = params['username']
     password = params['password']
+
     user = authenticate(username=username, password=password)
-    # token = Token.objects.get(username=username)
+
     if user is not None:
-        print(user)
-        return "Authenticated"
+        id = User.objects.get(username=username).pk
+        token = Token.objects.get(user_id=id)
+        return token.key
     else:
-        print("None")
         return None
+    
+
+def test_login():
+    body = {
+        "params": {'id':4, 'username':'nagat4', 'password':'thisismypassword', 'email':'testemail4@hotmail.com'},
+        "routing-key": "",
+        "function": "",
+        "reply": {
+            "corr-id": "",
+            "reply-to": ""
+        }
+    }
+    login(body)

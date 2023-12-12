@@ -21,13 +21,13 @@ def createUser(body: dict):
 
     token = Token.objects.create(user_id = id)
 
-    return {"Token":token.key, "Group":"User"}
+    return {"Token":token.key, "Group":"user"}
 
 
 
 # Authenticates a user against the user table using username and password
 # Arguments    : Dictionary (Structure can be found in shared/pikacomms/protocol.py)
-# Return value : A token key of type string
+# Return value : A dictionary containing a token key and the group the user belongs to
 def login(body: dict):
     params = body['params']
     username = params['username']
@@ -38,12 +38,13 @@ def login(body: dict):
     if user is not None:
         user_id = User.objects.get(username=username).pk
         token = Token.objects.get(user_id=user_id)
-        return {"Token":token.key, "Group":"User"}
+        user_group = getUserGroup(user_id=user_id)
+        return {"Token":token.key, "Group":user_group}
 
     else:
         return None
     
-# Needs to check that the token used to make the request belongs to an admmin or superuser
+# Needs to check that the token used to make the request belongs to an admin or superuser
 def deleteUser(user_id):
     pass
 

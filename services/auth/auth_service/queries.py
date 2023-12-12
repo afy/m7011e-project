@@ -22,6 +22,8 @@ def createUser(body: dict):
     token = Token.objects.create(user_id = id)
 
     return {"Token":token.key, "Group":"user"}
+    
+
 
 
 
@@ -38,8 +40,8 @@ def login(body: dict):
     if user is not None:
         user_id = User.objects.get(username=username).pk
         token = Token.objects.get(user_id=user_id)
-        user_group = getUserGroup(user_id=user_id)
-        return {"Token":token.key, "Group":user_group}
+        group = getUserGroup(user_id=user_id)
+        return {"Token":token.key, "Group":group}
 
     else:
         return None

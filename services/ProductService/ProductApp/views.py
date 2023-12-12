@@ -17,6 +17,10 @@ def home(request):
 
 #category_insert_query()
 
+#create_product()
+
+#product_discount()
+
 
 
 

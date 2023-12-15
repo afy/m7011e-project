@@ -3,25 +3,25 @@ from ProductApp.models import Special_Sale, Product, Category, Product_Discount
 
 # CRUD event
 
-def event_insert_query(event_name):
+def event_Insert_Query(event_name):
     b = Special_Sale(name=event_name)
     b.save()
 
-def event_delete_query(event_name):
+def event_Delete_Query(event_name):
 
     b = Special_Sale.objects.filter(name=event_name)
     b.delete()
 
-def fetch_all_events():
+def fetch_All_Events():
     b = Special_Sale.objects.all()
 
-def fetch_specific_event(event_name):
+def fetch_Specific_Event(event_name):
     b = Special_Sale.objects.filter(name=event_name)
 
 
 # CRUD category
 
-def category_insert_query(name):
+def category_Insert_Query(name):
 
     # Create an instance of the Category model
     category = Category(name=name)
@@ -29,19 +29,19 @@ def category_insert_query(name):
     # Save the category to the database
     category.save()
 
-def category_delete_query(category_id):
+def category_Delete_Query(category_id):
     b = Category.objects.get(id=category_id)
     b.delete()
 
-def fetch_all_categories():
+def fetch_All_Categories():
     b = Category.objects.all()
 
-def fetch_specific_category(category_name):
+def fetch_Specific_Category(category_name):
     b = Category.objects.filter(name=category_name)
 
 # CRUD product
 
-def create_product(category_id, product_price, product_stock, product_name, product_description):
+def create_Product(category_id, product_price, product_stock, product_name, product_description):
 
     category_instance = Category.objects.get(pk=category_id) 
     
@@ -49,19 +49,19 @@ def create_product(category_id, product_price, product_stock, product_name, prod
 
     product.save()
 
-def product_delete_query(product_id):
+def product_Delete_Query(product_id):
     b = Product.objects.get(id=product_id)
     b.delete()
 
-def fetch_all_products():
+def fetch_All_Products():
     b = Product.objects.all()
 
-def fetch_specific_product(product_name):
+def fetch_Specific_Product(product_name):
     b = Product.objects.filter(name=product_name)
 
 #update products
 
-def update_product(update_parameter, new_value, product_id):
+def update_Product(update_parameter, new_value, product_id):
     if(update_parameter=="name"):
         Product.objects.filter(pk=product_id).update(name=new_value)
 
@@ -83,7 +83,7 @@ def update_product(update_parameter, new_value, product_id):
 
 # CRUD product_discount
 
-def product_discount_insert_query(discount, special_sale_id, product_id):
+def product_Discount_Insert_Query(discount, special_sale_id, product_id):
 
     special_sale = Special_Sale.objects.get(pk=special_sale_id)
 
@@ -93,17 +93,17 @@ def product_discount_insert_query(discount, special_sale_id, product_id):
 
     product_discount.save() 
 
-def product_discount_delete_query(product_id):
+def product_Discount_Delete_Query(product_id):
     b = Product_Discount.objects.get(id=product_id)
     b.delete()
 
-def fetch_all_product_discount():
+def fetch_All_Product_Discount():
     b = Special_Sale.objects.all()
 
-def fetch_specific_product_discount(product_discount_name):
+def fetch_Specific_Product_Discount(product_discount_name):
     b = Special_Sale.objects.filter(name=product_discount_name)
 
-def update_product_discount(update_parameter, new_value, product_discount_id):
+def update_Product_Discount(update_parameter, new_value, product_discount_id):
     if(update_parameter=="product"):
         product_instance = Product.objects.get(pk=new_value) 
         Product.objects.filter(pk=product_discount_id).update(product=product_instance)

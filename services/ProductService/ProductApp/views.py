@@ -21,7 +21,8 @@ def home(request):
 
 #product_discount()
 
-
+print("hello")
+fetch_All_Products()
 
 
 

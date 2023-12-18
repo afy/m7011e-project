@@ -25,8 +25,6 @@ def createUser(body: dict):
     
 
 
-
-
 # Authenticates a user against the user table using username and password
 # Arguments    : Dictionary (Structure can be found in shared/pikacomms/protocol.py)
 # Return value : A dictionary containing a token key and the group the user belongs to
@@ -46,8 +44,32 @@ def login(body: dict):
     else:
         return None
     
-# Needs to check that the token used to make the request belongs to an admin or superuser
-def deleteUser(user_id):
+
+
+# Checks the group of the user the token_key belongs to. If group is admin or superuser, deletes user with id=user_id
+# Arguments: 
+#    token_key : token key of an superuser or admin
+#    user_id   : user id of an existing user
+def deleteUser(token_key, user_id):
+    try:
+        token = Token.objects.get(key=token_key)
+        user = User.objects.get(username=token.user)
+
+        if user.is_staff == 0 or user.is_superuser == 0:
+            raise PermissionDenied({"message : Access level insufficient"})
+        
+        else: 
+            user = User.objects.get(pk=user_id)
+            user.delete()
+
+    except Token.DoesNotExist:
+        raise PermissionDenied({"message: Invalid token"})
+    
+    except User.DoesNotExist:
+        raise PermissionDenied({"message : Invalid user_id"})
+    
+
+def updateUser():
     pass
 
 
@@ -62,6 +84,17 @@ def tokenAuthentication(token_key):
     
     except Token.DoesNotExist:
         raise PermissionDenied({"message: Invalid token"})
+    
+
+# Creates a token for an existing user
+# Argument : Name of an existing user
+def createToken(user_id):
+    token = Token.objects.create(user_id = user_id)
+    token.save()
+
+
+def updateToken():
+    pass
 
 
 
@@ -72,6 +105,8 @@ def createGroups(group_name):
     new_group.save()
 
 
+def deleteGroups():
+    pass
 
 
 # Adds an existing user to an existing group
@@ -91,8 +126,6 @@ def addToGroup(user_id, group_name):
     except Group.DoesNotExist:
         raise PermissionDenied({"message: Invalid Group"})
     
-
-
 
 # Fetches the group the corresponding user belongs to 
 # Arguments    : user id of an existing user
@@ -120,7 +153,7 @@ def getUserGroup(user_id):
 
 def testCreateUser():
     body = {
-        "params": {'id':4, 'username':'nagat4', 'password':'thisismypassword', 'email':'testemail4@hotmail.com'},
+        "params": {'id':3, 'username':'nagat3', 'password':'thisismypassword', 'email':'testemail3@hotmail.com'},
         "routing-key": "",
         "function": "",
         "reply": {

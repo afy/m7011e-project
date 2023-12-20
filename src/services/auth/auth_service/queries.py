@@ -12,8 +12,8 @@ from django.contrib.auth import authenticate
 #    id        : nonexisting id
 #    username  : username of the user
 #    password  : password of the user
-#    emial     : email of nonexisting user
-# Return value : A token key of type string
+#    email     : email of nonexisting user
+# Return value : A dictionary containing a token key and the group the user belongs to
 def createUser(id, username, password, email):
     user = User.objects.create_user(id=id, username=username, password=password, email=email)
     user.save()

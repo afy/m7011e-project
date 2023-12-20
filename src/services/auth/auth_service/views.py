@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .queries import *
 
 
+
 lookup = {
 
     "create-user": {
@@ -38,12 +39,6 @@ lookup = {
         "func": createToken,
         "groups": ["admin", "superuser"],
         "required_fields": [("user_id", str)]
-    },
-
-    "update-token": {
-        "func": updateToken,
-        "groups": ["user", "admin", "superuser"],
-        "required_fields": [("token_key", str), ("user_id", str)]
     },
 
     "create-groups": {

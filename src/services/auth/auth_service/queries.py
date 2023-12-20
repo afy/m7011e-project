@@ -1,3 +1,6 @@
+import binascii
+import os
+
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import PermissionDenied
 from django.contrib.auth.models import User, Group
@@ -5,15 +8,13 @@ from django.contrib.auth import authenticate
 
 
 # Creates a user in the auth_user table and adds the user to the 'user' group in the auth_user_groups table
-# Arguments    : Dictionary (Structure can be found in shared/pikacomms/protocol.py)
+# Arguments: 
+#    id        : nonexisting id
+#    username  : username of the user
+#    password  : password of the user
+#    emial     : email of nonexisting user
 # Return value : A token key of type string
-def createUser(body: dict):
-    params = body['params']
-    id = params['id']
-    username = params['username']
-    password = params['password']
-    email = params['email']
-
+def createUser(id, username, password, email):
     user = User.objects.create_user(id=id, username=username, password=password, email=email)
     user.save()
 
@@ -26,13 +27,11 @@ def createUser(body: dict):
 
 
 # Authenticates a user against the user table using username and password
-# Arguments    : Dictionary (Structure can be found in shared/pikacomms/protocol.py)
+# Arguments: 
+#    username  : username of an existing user
+#    password  : password of an existing user
 # Return value : A dictionary containing a token key and the group the user belongs to
-def login(body: dict):
-    params = body['params']
-    username = params['username']
-    password = params['password']
-
+def login(username, password):
     user = authenticate(username=username, password=password)
 
     if user is not None:
@@ -66,11 +65,29 @@ def deleteUser(token_key, user_id):
         raise PermissionDenied({"message: Invalid token"})
     
     except User.DoesNotExist:
-        raise PermissionDenied({"message : Invalid user_id"})
+        raise PermissionDenied({"message : Invalid user id"})
     
 
-def updateUser():
-    pass
+
+# Changes password of an existing user
+# Arguments:
+#    user_id : id of an existing user
+#    password : password of the user with id=user_id
+#    new_password : new password of the user with id=user_id
+def updateUser(user_id, password, new_password):
+    try:
+        username = User.objects.get(id=user_id).username
+        auth = authenticate(username=username, password=password)
+
+        if auth is not None:
+            user = User.objects.get(id=user_id)
+            user.set_password(new_password)
+            user.save()
+        else:
+            raise PermissionDenied({"message : User credentials invalid"})
+
+    except User.DoesNotExist:
+        raise PermissionDenied({"message : Invalid user id"})
 
 
 
@@ -93,8 +110,20 @@ def createToken(user_id):
     token.save()
 
 
-def updateToken():
-    pass
+# Note : changes the primary key of the authtoken table
+# Genreates a new token key for an existing user with key=token_key
+# Argument : token key of an existing user
+"""
+def updateToken(token_key):
+    try:
+        new_token = binascii.hexlify(os.urandom(20)).decode()
+
+        Token.objects.filter(key=token_key).update(key=new_token)
+
+    except Token.DoesNotExist:
+        raise PermissionDenied({"message : Invalid token"})
+"""
+
 
 
 
@@ -105,8 +134,15 @@ def createGroups(group_name):
     new_group.save()
 
 
-def deleteGroups():
-    pass
+# Deletes an existing group
+# Argument : Name of an existing group
+def deleteGroups(group_name):
+    try:
+        group = Group.objects.get(name=group_name)
+        group.delete()
+    
+    except Group.DoesNotExist:
+        raise PermissionDenied(["message : Invalid group name"])
 
 
 # Adds an existing user to an existing group
@@ -144,34 +180,3 @@ def getUserGroup(user_id):
     except Group.DoesNotExist:
         raise PermissionDenied({"message : User does not belong to a group"})
     
-
-
-
-
-
- # -------------------Tests------------------
-
-def testCreateUser():
-    body = {
-        "params": {'id':3, 'username':'nagat3', 'password':'thisismypassword', 'email':'testemail3@hotmail.com'},
-        "routing-key": "",
-        "function": "",
-        "reply": {
-            "corr-id": "",
-            "reply-to": ""
-        }
-    }
-    createUser(body)
-
-
-def testLogin():
-    body = {
-        "params": {'id':4, 'username':'nagat4', 'password':'thisismypassword', 'email':'testemail4@hotmail.com'},
-        "routing-key": "",
-        "function": "",
-        "reply": {
-            "corr-id": "",
-            "reply-to": ""
-        }
-    }
-    login(body)

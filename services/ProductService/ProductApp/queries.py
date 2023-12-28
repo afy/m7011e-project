@@ -16,7 +16,8 @@ def fetch_All_Events():
     b = Special_Sale.objects.all().values()
 
 def fetch_Specific_Event(event_name):
-    b = Special_Sale.objects.filter(name=event_name)
+    b = Special_Sale.objects.filter(name=event_name).values()
+    return b
 
 
 # CRUD category
@@ -37,7 +38,8 @@ def fetch_All_Categories():
     b = Category.objects.all().values()
 
 def fetch_Specific_Category(category_name):
-    b = Category.objects.filter(name=category_name)
+    b = Category.objects.filter(name=category_name).values()
+    return b
 
 # CRUD product
 
@@ -58,8 +60,8 @@ def fetch_All_Products():
 
 
 def fetch_Specific_Product(product_name):
-    b = Product.objects.values_list("name", flat=True)[0]
-    
+    b = Product.objects.filter(name=product_name).values()
+    return b
 
 #update products
 
@@ -100,22 +102,26 @@ def product_Discount_Delete_Query(product_id):
     b.delete()
 
 def fetch_All_Product_Discount():
-    b = Special_Sale.objects.all()
+    b = Product_Discount.objects.all()
 
-def fetch_Specific_Product_Discount(product_discount_name):
-    b = Special_Sale.objects.filter(name=product_discount_name)
+def fetch_Specific_Product_Discount(product_name):
+    b = Product.objects.get(name=product_name)
+    b = Product_Discount.objects.filter(product=b).values()
+    return b
+
 
 def update_Product_Discount(update_parameter, new_value, product_discount_id):
     if(update_parameter=="product"):
-        product_instance = Product.objects.get(pk=new_value) 
-        Product.objects.filter(pk=product_discount_id).update(product=product_instance)
+        product_instance = Product.objects.get(name=new_value) 
+        Product_Discount.objects.filter(pk=product_discount_id).update(product=product_instance)
 
     elif(update_parameter=="special_sale"):
-        special_sale_instance = Special_Sale.objects.get(pk=new_value) 
-        Product.objects.filter(pk=product_discount_id).update(specia_sale=special_sale_instance)
+        special_sale_instance = Special_Sale.objects.get(name=new_value) 
+        Product_Discount.objects.filter(pk=product_discount_id).update(special_sale=special_sale_instance)
 
     elif(update_parameter=="discount"):
-        Product.objects.filter(pk=product_discount_id).update(name=new_value)
+        Product_Discount.objects.filter(pk=product_discount_id).update(discount=new_value)
 
     else:
         return "send a valid update_parameter"
+    

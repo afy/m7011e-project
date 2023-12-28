@@ -7,22 +7,20 @@ from django.shortcuts import render, HttpResponse
 #from .APIGatewayServer import ApiGatewayServer
 from .queries import *
 
+
+lookup = {
+    "get_event":{
+        "func": event_Insert_Query,
+        "groups":["admin"],
+        "required_fields":[("id", int),("category", str)]
+    }
+}
+
 # Create your views here.
 def home(request):
     return HttpResponse("hello world")
 
-#event_insert_query()
 
-#event_delete_query()
-
-#category_insert_query()
-
-#create_product()
-
-#product_discount()
-
-print("hello")
-fetch_All_Products()
 
 
 

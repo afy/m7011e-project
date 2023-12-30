@@ -5,7 +5,7 @@ from django.conf import settings
 # Create your models here.
 
 class Product(models.Model):
-    category = models.OneToOneField("Category", on_delete=models.PROTECT)
+    category = models.ForeignKey("Category", on_delete=models.PROTECT)
     price = models.IntegerField()
     stock = models.IntegerField()
     name = models.CharField(max_length=255)
@@ -33,7 +33,7 @@ class Special_Sale(models.Model):
 
 class Product_Discount(models.Model):
     product = models.ForeignKey('Product', on_delete=models.PROTECT)
-    special_sale = models.OneToOneField("Special_Sale", on_delete=models.PROTECT)
+    special_sale = models.ForeignKey("Special_Sale", on_delete=models.PROTECT)
     discount = models.IntegerField()
     @classmethod
     def create(cls, discount, product, special_sale):

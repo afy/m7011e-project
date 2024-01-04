@@ -19,7 +19,7 @@ class PikaClient:
             routing_key = key, 
             body = protocol.parseToNet(params, key, func, reply)
         )
-        log_msg = f"Sent func {func} with {params} to " if self.log_info else "Sent data to "
+        log_msg = f"Sent func {func} with {params} to " if self.log_params else "Sent data to "
         log_msg += f"{key}"
         self.log(log_msg)
 

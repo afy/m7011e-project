@@ -41,6 +41,7 @@ class PikaServerLookup:
         
         # Verify args are met; return T/F
         req = self.lookup[func_name]["required-args"]
+        if req == None: return True
         for arg in req:
             if not (arg[0] in params and type(params[arg[0]] == arg[1])):
                 return False
@@ -65,9 +66,10 @@ class PikaServer:
         self.queue = _queue
         self.lookup = _lookup
         connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host='localhost')
+            pika.ConnectionParameters(host='localhost', port=5672, heartbeat = 0)
         )
         self.channel = connection.channel()
+        #self.channel.queue_delete(queue = self.queue)
         self.channel.queue_declare(queue = self.queue)
         self.channel.basic_qos(prefetch_count = 1)
         self.channel.basic_consume(queue = self.queue, on_message_callback = self.handle)
@@ -97,7 +99,7 @@ class PikaServer:
             return
         
         try:
-            dest_params, dest_key, dest_func, dest_reply = self.lookup.get_func()(body)
+            dest_params, dest_key, dest_func, dest_reply = self.lookup.get_func(body["function"])(body)
         except Exception as e:
             self.log(f"In message handler: Something went wrong during function call.\n{e}")
             return

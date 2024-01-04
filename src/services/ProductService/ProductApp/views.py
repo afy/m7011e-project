@@ -1,13 +1,17 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import Product
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from shared.pikacomms.APIGatewayServer import ApiGatewayServer
-from shared.pikacomms.server import PikaServer
-#from .APIGatewayServer import ApiGatewayServer
 from .queries import *
 
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
+from shared.pikacomms.server import PikaServer, PikaServerLookup
+
+def example(body):
+    print("Cool!")
+    return {}, body.key, "ret", body["reply"]  
+
+lookup_new = PikaServerLookup() 
+lookup_new.add("create_product", example, None)
+server = PikaServer("prod", lookup_new, "ProdServer")
+server.startListening()
 
 lookup = {
     "create_event":{
@@ -51,12 +55,3 @@ lookup = {
         "required_fields":[("category_id", str)]
     }
 }
-
-# Create your views here.
-def home(request):
-    return HttpResponse("hello world")
-
-
-
-
-

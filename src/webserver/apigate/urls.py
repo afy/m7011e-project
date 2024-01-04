@@ -2,6 +2,6 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.app, name='app'),
-    path('prod/<str:name>/', views.handle_product_api, name="get_product")
+    path('prod/get/<str:name>/', views.handle_product_api, kwargs={"func":"get"}, name="get_product"),
+    path('prod/update/<str:name>/', views.handle_product_api, kwargs={"func":"update"}, name="update_product"),
 ]

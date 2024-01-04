@@ -12,14 +12,16 @@ ms_routing = {
 }
 
 # Communicate with microservices
-api_gateway_client = PikaClient()
+#api_gateway_client = PikaClient()
 
-def app(request):
-    print("Entered app")
-    return HttpResponse("<h>Hello world<h>")
-
-def handle_product_api(request, name):
-    print("Entered get_product")
+def handle_product_api(request, name, func):
     #response = api_gateway_client.call(name)
+    print(func)
     response = {}
     return JsonResponse(response)
+
+def handle_auth_api(request, name, func):
+    pass
+
+def handle_order_api(request, name, func):
+    pass

@@ -4,11 +4,6 @@ import json
 
 #from ...shared.pikacomms.client import PikaClient
 
-# Load routing data from config
-routing = {}
-with open('../config/api-routing.json', 'r') as f:
-    routing = json.loads(f.read())
-
 #api_gateway_client = PikaClient()
 
 def app(request):

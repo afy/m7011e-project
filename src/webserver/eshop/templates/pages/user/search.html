@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<div class="navbar">
+    {% include "components/navbars/navbar.html" %}
+</div>
+
+<h1>Search</h1>
+<input type="search", id="in_search" placeholder="Search for products"/> 
+<button onclick="searchProducts()">Search</button>
+
+
+<div style="padding-left: 5%; padding-top: 3%;" id="results"></div>
+
+<script>
+searchProducts()
+
+function searchProducts() {
+    let sb = document.getElementById('in_search');
+
+    // Request data via API
+    var d = [
+        {"name": "sneakers", "id": 5},
+        {"name": "sandals", "id": 3}
+    ]
+
+    if (sb.value == "") {
+        updateResultList(d);
+        return;
+    }
+
+    var results = []
+    d.forEach(el => {
+        if (el['name'] == sb.value) {results.push(el)}
+    });
+    updateResultList(results)
+}
+
+function updateResultList(data) {
+    document.getElementById('results').innerHTML = "";
+
+    data.forEach(el => { 
+        let res = document.getElementById('results');
+        let ne = document.createElement('a');
+        ne.appendChild(document.createTextNode(el['name']));
+        ne.setAttribute('href', '/prod/'+el['id'].toString());
+        results.appendChild(ne);
+        results.appendChild(document.createElement('br'))
+    });
+}
+</script>
+
+</body>
+</html>

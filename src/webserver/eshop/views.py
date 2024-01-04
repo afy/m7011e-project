@@ -1,6 +1,14 @@
 from django.shortcuts import render
 import requests
 
+
+
+# Misc
+def login(request):
+    return render(request, 'pages/login.html')
+
+
+
 # User views
 def home(request):
     return render(request, 'pages/user/home.html')
@@ -10,9 +18,6 @@ def product(request):
 
 def search(request):
     return render(request, 'pages/user/search.html')
-
-def login(request):
-    return render(request, 'pages/user/login.html')
 
 def account(request):
     return render(request, 'pages/user/account.html')

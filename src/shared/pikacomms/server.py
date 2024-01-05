@@ -69,7 +69,7 @@ class PikaServer:
             pika.ConnectionParameters(host='localhost', port=5672, heartbeat = 0)
         )
         self.channel = connection.channel()
-        #self.channel.queue_delete(queue = self.queue)
+        self.channel.queue_delete(queue = self.queue)
         self.channel.queue_declare(queue = self.queue)
         self.channel.basic_qos(prefetch_count = 1)
         self.channel.basic_consume(queue = self.queue, on_message_callback = self.handle)
@@ -84,8 +84,9 @@ class PikaServer:
         self.channel.start_consuming()
 
 
-    def handle(self, ch, method, props, body):
+    def handle(self, ch, method, props, body):       
         body = protocol.parseFromNet(body)
+        self.log(str(body))
         if body == None: 
             self.log(f"In message handler: Invalid parsing; skipping message. Full message: {body}")
             return 
@@ -109,11 +110,10 @@ class PikaServer:
         # Reply if required values are provided
         # Make sure to use the old "reply" values (the one for the parsed packet),
         # Not the new return values
-        if ("reply-to" in body["reply"] and "corr-id" in body["reply"]):
-            ch.basic_publish(
-                    exchange='',
-                    routing_key = body["reply"]["reply-to"],
-                    properties = pika.BasicProperties(correlation_id = body["reply"]["corr-id"]),
-                    body = response
-            )
-            ch.basic_ack(delivery_tag = method.delivery_tag)
+        ch.basic_publish(
+                exchange='',
+                routing_key = props.reply_to,
+                properties = pika.BasicProperties(correlation_id = props.correlation_id),
+                body = response
+        )
+        ch.basic_ack(delivery_tag = method.delivery_tag)

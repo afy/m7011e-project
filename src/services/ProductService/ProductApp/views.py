@@ -6,7 +6,7 @@ from shared.pikacomms.server import PikaServer, PikaServerLookup
 
 def example(body):
     print("Cool!")
-    return {}, body.key, "ret", body["reply"]  
+    return {"test-response-data": 5}, None, None, body["reply"]  
 
 lookup_new = PikaServerLookup() 
 lookup_new.add("create_product", example, None)

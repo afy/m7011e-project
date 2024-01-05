@@ -5,15 +5,21 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../.
 from shared.pikacomms.server import PikaServer, PikaServerLookup
 
 def example(body):
-    print("Cool!")
-    return {"test-response-data": 5}, None, None, body["reply"]  
+    print("Func-call")
+    return {"test-response-data": 5, "body-sent": body}
 
-lookup_new = PikaServerLookup() 
-lookup_new.add("create_product", example, None)
-server = PikaServer("prod", lookup_new, "ProdServer")
+lookup = PikaServerLookup() 
+lookup.add(
+    "create-product", create_Product, ["admin"], 
+    [("category_id", int), ("product_price", int), ("product_stock",int), ("product_name", str), ("product_description",str)])
+
+lookup.add("delete-product", product_Delete_Query, ["admin"],
+    [("product_id", int)])
+
+server = PikaServer("prod", lookup, "Product Server")
 server.startListening()
 
-lookup = {
+lookup_old = {
     "create_event":{
         "func": event_Insert_Query,
         "groups":["admin"],

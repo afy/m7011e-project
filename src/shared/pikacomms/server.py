@@ -16,15 +16,10 @@ class GenericPikaServerException(Exception):
 class PikaServerLookup:
     def __init__(self):
         self.lookup = {}
-        self.arg_warning_shown = False
 
 
-    def add(self, func_name: str, func_ref: Callable, required_args: list = None):
-        if not self.arg_warning_shown:
-            print("Note: any lookup_func should take parameter [body] \
-                  and should return [params, routing key, function, [opt reply; else None]]")
-            self.arg_warning_shown = True
-        self.lookup[func_name] = {"ref": func_ref, "required-args": required_args}
+    def add(self, func_name:str, func_ref:Callable, required_groups:list, required_args:list = None):
+        self.lookup[func_name] = {"ref": func_ref, "required-groups": required_groups, "required-args": required_args}
 
 
     # Check if function exists
@@ -73,6 +68,7 @@ class PikaServer:
         self.channel.queue_declare(queue = self.queue)
         self.channel.basic_qos(prefetch_count = 1)
         self.channel.basic_consume(queue = self.queue, on_message_callback = self.handle)
+        self.log("Initialized pikaserver")
         
 
     def log(self, m: str):
@@ -86,30 +82,27 @@ class PikaServer:
 
     def handle(self, ch, method, props, body):       
         body = protocol.parseFromNet(body)
-        self.log(str(body))
+        response = None
         if body == None: 
             self.log(f"In message handler: Invalid parsing; skipping message. Full message: {body}")
-            return 
+            response = protocol.parseToError("Invalid parsing")
         
-        if not self.lookup.func_exists(body["function"]):
+        elif not self.lookup.func_exists(body["function"]):
             self.log(f"In message handler: Function {body['function']} does not exist in lookup.")
-            return
+            response = protocol.parseToError("Function does not exist")
         
-        if not self.lookup.required_args_met(body["function"], body["params"]):
+        elif not self.lookup.required_args_met(body["function"], body["params"]):
             self.log(f"In message handler: Required args are not met: {body['params']}")
-            return
+            response = protocol.parseToError("Required args not met")
         
-        try:
-            dest_params, dest_key, dest_func, dest_reply = self.lookup.get_func(body["function"])(body)
-        except Exception as e:
-            self.log(f"In message handler: Something went wrong during function call.\n{e}")
-            return
-
-        response = protocol.parseToNet(dest_params, dest_key, dest_func, dest_reply)
-
-        # Reply if required values are provided
-        # Make sure to use the old "reply" values (the one for the parsed packet),
-        # Not the new return values
+        if response == None:
+            try:
+                return_value = self.lookup.get_func(body["function"])(body)
+                response = protocol.parseToNet({"return": return_value}, "func-return", None, None)
+            except Exception as e:
+                self.log(f"In message handler: Something went wrong during function call.\n{e}")
+                response = protocol.parseToError("Something went wrong during function call")
+  
         ch.basic_publish(
                 exchange='',
                 routing_key = props.reply_to,

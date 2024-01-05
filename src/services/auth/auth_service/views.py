@@ -8,13 +8,14 @@ def example(body):
     print("Auth")
     return {"test-response-data": 3}, None, None, body["reply"]  
 
-lookup_new = PikaServerLookup() 
-lookup_new.add("create_user", example, None)
-server = PikaServer("auth", lookup_new, "AuthServer")
+lookup = PikaServerLookup() 
+lookup.add("create-user", example, None)
+
+server = PikaServer("auth", lookup, "Authorization Server")
 server.startListening()
 
 
-lookup = {
+lookup_OLD = {
 
     "create-user": {
         "func": createUser,

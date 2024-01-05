@@ -17,8 +17,8 @@ class PikaServerLookup:
     def __init__(self):
         self.lookup = {}
 
-
-    def add(self, func_name:str, func_ref:Callable, required_groups:list, required_args:list = None):
+    # Add new function to lookup
+    def add(self, func_name:str, func_ref:Callable, required_groups:list = None, required_args:list = None):
         self.lookup[func_name] = {"ref": func_ref, "required-groups": required_groups, "required-args": required_args}
 
 
@@ -27,8 +27,27 @@ class PikaServerLookup:
         return func_name in self.lookup
     
 
+    # Check if group requirements are met
+    def required_groups_met(self, func_name:str, body:dict) -> bool:
+        if not self.func_exists(func_name):
+            raise GenericPikaServerException("Function does not exist.")
+        if not "required-groups" in self.lookup[func_name]:
+            raise GenericPikaServerException("Malformed lookup table; no required groups stored.")
+        
+        # Verify groups return T/F
+        req = self.lookup[func_name]["required-groups"]
+        if req == None: return True
+        if not "user-validation" in body or body["user-validation"] == None: return False
+        if not "groups" in body["user-validation"]: return False 
+
+        for req_group in req:
+            if not req_group in body["user-validation"]["groups"]:
+                return False
+        return True
+
+
     # Check if param requirements pass
-    def required_args_met(self, func_name: str, params: dict) -> bool:
+    def required_args_met(self, func_name:str, params:dict) -> bool:
         if not self.func_exists(func_name):
             raise GenericPikaServerException("Function does not exist.")
         if not "required-args" in self.lookup[func_name]:
@@ -44,7 +63,7 @@ class PikaServerLookup:
 
 
     # Return function callabe
-    def get_func(self, func_name: str) -> Callable:
+    def get_func(self, func_name:str) -> Callable:
         if not self.func_exists(func_name):
             raise GenericPikaServerException("Function does not exist.")
         if not "ref" in self.lookup[func_name]:
@@ -53,7 +72,7 @@ class PikaServerLookup:
 
 
 class PikaServer:
-    def __init__(self, _queue : str, _lookup : PikaServerLookup, _name:str="Server"):
+    def __init__(self, _queue:str, _lookup:PikaServerLookup, _name:str="Server"):
         if type(_lookup) != PikaServerLookup:
             raise CannotCreatePikaServerException("Please use lookup of type PikaServerLookup.")
 
@@ -64,14 +83,14 @@ class PikaServer:
             pika.ConnectionParameters(host='localhost', port=5672, heartbeat = 0)
         )
         self.channel = connection.channel()
-        self.channel.queue_delete(queue = self.queue)
+        self.channel.queue_delete(queue = self.queue) # Clear old queue
         self.channel.queue_declare(queue = self.queue)
         self.channel.basic_qos(prefetch_count = 1)
         self.channel.basic_consume(queue = self.queue, on_message_callback = self.handle)
         self.log("Initialized pikaserver")
         
 
-    def log(self, m: str):
+    def log(self, m:str):
         print(f" [{self.server_name} {time.strftime('%H:%M:%S', time.localtime())}] " + m)
 
 
@@ -94,6 +113,10 @@ class PikaServer:
         elif not self.lookup.required_args_met(body["function"], body["params"]):
             self.log(f"In message handler: Required args are not met: {body['params']}")
             response = protocol.parseToError("Required args not met")
+
+        elif not self.lookup.required_groups_met(body["function"], body):
+            self.log(f"In message handler: Required groups are not met")
+            response = protocol.parseToError("Required groups not met")
         
         if response == None:
             try:

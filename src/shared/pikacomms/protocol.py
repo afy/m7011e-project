@@ -6,24 +6,24 @@ template = {
     "error": None,
     "params": {},
     "function": "",
-    "user-validated": {
+    "user-validation": {
         "id": "",
         "groups": []
     }
 }
 
-not_implemented_response = {"error": "function not implemented", "params":{}, "function":None, "user-validated":None}
-undefined_logic_response = {"error": "undefined logic", "params":{}, "function":None, "user-validated":None}
+not_implemented_response = {"error": "function not implemented", "params":{}, "function":None, "user-validation":None}
+undefined_logic_response = {"error": "undefined logic", "params":{}, "function":None, "user-validation":None}
 
 def parseToError(details:str):
-    return json.dumps({"error": details, "params":{}, "function":None, "user-validated":None}).encode('utf-8')
+    return json.dumps({"error": details, "params":{}, "function":None, "user-validation":None}).encode('utf-8')
 
 # Sending 
 def parseToNet(params:dict, function:str, userv:dict = None, error:str=None) -> bytes:
     data = {
         "params": params,
         "function": function,
-        "user-validated":userv,
+        "user-validation":userv,
         "error":error
     }
     return json.dumps(data).encode('utf-8')

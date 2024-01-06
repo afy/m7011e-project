@@ -27,8 +27,8 @@ class Order_item(models.Model):
     count = models.IntegerField()
     
     @classmethod
-    def create(cls, product_id, price, count):
-        order_item = cls(product_id=product_id, price=price, count=count)
+    def create(cls, product_id, price, count, order_instance):
+        order_item = cls(product_id=product_id, price=price, count=count, order_id=order_instance)
         # do something with the book
         return order_item
 

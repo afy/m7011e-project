@@ -5,12 +5,25 @@ from OrderApp.models import Order, Order_item
 
 class OrderTestCase(TestCase):
     def setUp(self):
-        event_Insert_Order("Christmas")
-        event_Insert_Order("Summer")
-    
-   # def test_Orderexists(self):
-        #christmas_event = fetch_Specific_Event("Christmas")[0]['name']
-        #summer_event = fetch_Specific_Event("Summer")[0]['name']
+        insert_Order(user_id=1, payment_status=1,order_date="28/7",total_price=20,payment_method="Mastercatd" )
+        insert_Order(user_id=2, payment_status=0,order_date="26/7",total_price=10,payment_method="Mastercatd")
+        insert_Order_Item(1,2,3,5)
+        insert_Order_Item(1,2,3,5)
+        insert_Order_Item(1,2,3,5)
 
-      #  self.assertEqual(christmas_event, "Christmas")
-      #  self.assertEqual(summer_event, "Summer")
+        insert_Order_Item(2,2,3,5)
+        insert_Order_Item(2,2,3,5)
+        insert_Order_Item(2,2,3,5)
+
+    
+    def test_Orderexists(self):
+        order_id_1 = fetch_Specific_Order_With_Items(1)[0]['id']
+        order_id_2 = fetch_Specific_Order_With_Items(2)[0]['id']
+
+        self.assertEqual(order_id_1, 1)
+        self.assertEqual(order_id_2, 4)
+        
+    def test_change_payment_status(self):
+        update_Payment_status(1,0)
+        order_id_1 = fetch_Specific_Order(1)[0]['payment_status']
+        self.assertEqual(order_id_1,0)

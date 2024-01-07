@@ -1,10 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Product
+from django.http import HttpResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from shared.pikacomms.APIGatewayServer import ApiGatewayServer
-from shared.pikacomms.server import PikaServer
+#from shared.pikacomms.APIGatewayServer import ApiGatewayServer
+#from shared.pikacomms.server import PikaServer
 #from .APIGatewayServer import ApiGatewayServer
 from .queries import *
 

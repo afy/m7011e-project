@@ -30,6 +30,13 @@ def category_Insert_Query(name):
     # Save the category to the database
     category.save()
 
+def subcategory_Insert_Query(name,subname):
+    category = Category.objects.get(name=name)
+
+    subcategory = Category(name=subname, parent_category=category)
+
+    subcategory.save()
+
 def category_Delete_Query(category_id):
     b = Category.objects.get(id=category_id)
     b.delete()
@@ -39,6 +46,10 @@ def fetch_All_Categories():
 
 def fetch_Specific_Category(category_name):
     b = Category.objects.filter(name=category_name).values()
+    return b
+
+def fetch_Specific_Category_Object(category_name):
+    b = Category.objects.get(name=category_name)
     return b
 
 # CRUD product

@@ -6,12 +6,14 @@
     {% include "components/navbars/navbar.html" %}
 </div>
 
-<h1>Login page</h1>
+<h1>Create acccount page</h1>
 
 <form action="" method="POST">
     {% csrf_token %}
     <label for="email">Email:</label>
     <input type="text" id="email" name="email"><br><br>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username"><br><br>
     <label for="password">Password:</label>
     <input type="text" id="password" name="password"><br><br>
     <input type="submit" value="Submit">

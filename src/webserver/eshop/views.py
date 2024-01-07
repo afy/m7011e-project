@@ -1,12 +1,31 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import requests
 
 
 
 # Misc
 def login(request):
+    if request.method == "POST":
+        # Detta kan göras login.html också men blir svårare att hantera responses, javascript?
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        response = requests.post('http://127.0.0.1:8000/api/v1/user', data={"email":email, "password":password})
+
+        #Parse token and group out from response and save in localstorage
+        
+        return redirect('pages/user/home.html')
+    
     return render(request, 'pages/login.html')
 
+
+def createAccount(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        #Get token to include in post req
+        response = request.post('http://127.0.0.1:8000/api/v1/user', data={"email":email, "username":username, "password":password})
+    return render(request, 'pages/create_acc.html')
 
 
 # User views

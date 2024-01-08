@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<div class="navbar">
+    {% include "components/navbars/navbar.html" %}
+</div>
+
+<h1>Login page</h1>
+
+<form action="" method="POST">
+    {% csrf_token %}
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email"><br><br>
+    <label for="password">Password:</label>
+    <input type="text" id="password" name="password"><br><br>
+    <input type="submit" value="Submit">
+  </form>
+
+</body>
+</html>

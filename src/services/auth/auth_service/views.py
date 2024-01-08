@@ -1,9 +1,48 @@
-from django.shortcuts import render
 from .queries import *
 
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
+from shared.pikacomms.server import PikaServer, PikaServerLookup
+
+lookup = PikaServerLookup() 
+
+# User table CRUD
+lookup.add("create-user", createUser, ['', 'user', 'admin', 'superuser'], 
+           [('id', int), ('username', str), ('password', str), ('email', str)])
+
+lookup.add("update-user", updateUser, ['user', 'admin', 'superuser'], 
+           [('user_id', int), ('password', str), ('new_password', str)])
+
+lookup.add("delete-user", deleteUser, ['admin', 'superuser'],
+           [('token_key', str), ('user_id', str)])
+# Read
 
 
-lookup = {
+# Other
+lookup.add("login", login, ['', 'user', 'admin', 'superuser'], 
+           [('username', str), ('password', str)])
+
+lookup.add("token-auth", tokenAuthentication, ['', 'user', 'admin', 'superuser'], 
+           [('token_key', str)])
+
+lookup.add("create-token", createToken, ['admin', 'superuser'], 
+           [('user_id', str)])
+
+lookup.add("create-groups", createGroups, ['admin', 'superuser'], 
+           [('group_name', str)])
+
+lookup.add("delete-groups", deleteGroups, ['admin', 'superuser'], 
+           [('group_name', str)])
+
+lookup.add("add-to-group", addToGroup, ['admin', 'superuser'],
+           [('user_id', str), ('group_name', str)])
+
+
+server = PikaServer("auth", lookup, "Authorization Server")
+server.startListening()
+
+
+lookup_OLD = {
 
     "create-user": {
         "func": createUser,
@@ -66,6 +105,3 @@ lookup = {
     },
     
 }
-
-
-# Create your views here.

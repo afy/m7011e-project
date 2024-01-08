@@ -1,16 +1,43 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import Product
-from django.http import HttpResponse
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-#from shared.pikacomms.APIGatewayServer import ApiGatewayServer
-#from shared.pikacomms.server import PikaServer
-#from .APIGatewayServer import ApiGatewayServer
 from .queries import *
+import time
+
+import sys, os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
+from shared.pikacomms.server import PikaServer, PikaServerLookup
+
+def example(body):
+    print("Func-call")
+    return {"test-response-data": "example-data", "body-sent": body}
+
+def example_timeout(body):
+    print("Initializing timeout for 15 seconds")
+    time.sleep(15)
+    return {"timeout": "15s"}
+
+# Init lookup
+lookup = PikaServerLookup() 
+lookup.add("test-function", example, None, None)
+lookup.add("test-timeout", example_timeout, None, None)
+
+# Product
+lookup.add(
+    "create-product", create_Product, ["admin"], 
+    [("category_id", int), ("product_price", int), ("product_stock",int), ("product_name", str), ("product_description",str)])
+
+lookup.add("delete-product", product_Delete_Query, ["admin"],
+    [("product_id", int)])
+
+# Category
+# Special_sale
+# Product_discount
+
+server = PikaServer("prod", lookup, "Product Server")
+server.startListening()
 
 
-lookup = {
+
+
+lookup_old = {
     "create_event":{
         "func": event_Insert_Query,
         "groups":["admin"],
@@ -52,12 +79,3 @@ lookup = {
         "required_fields":[("category_id", str)]
     }
 }
-
-# Create your views here.
-def home(request):
-    return HttpResponse("hello world")
-
-
-
-
-

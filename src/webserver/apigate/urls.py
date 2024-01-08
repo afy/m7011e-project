@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.app, name='app'),
-    path('prod/<str:name>/', views.get_product, name="get_product")
+    # CRUD for all DB tables
+    path('product/<int:id>/', views.handle_product_crud, name="crud-product"),
+    path('category/<str:name>/', views.handle_category_crud, name="crud-category"),
+    path('user/<int:id>/', views.handle_user_crud, name='crud-user'),
 ]

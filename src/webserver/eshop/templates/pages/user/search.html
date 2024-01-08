@@ -20,6 +20,21 @@ function searchProducts() {
     let sb = document.getElementById('in_search');
 
     // Request data via API
+    // note: Change all instances of 'd' to 'products'
+    apiUrl = 'https://127.0.0.1:8000/api/v1/products/' + in_search
+    
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        resp = response.json();
+    })
+
+    var products = [resp]
+
+
+    // Example
     var d = [
         {"name": "sneakers", "id": 5},
         {"name": "sandals", "id": 3}

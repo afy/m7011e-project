@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<body>
+<body onload="test">
 
 <div class="navbar">
     {% include "components/navbars/navbar.html" %}
@@ -8,6 +8,49 @@
 
 <h1>Hello World!</h1>
 <p>Product page</p>
+
+
+<script>
+
+function getAllProducts() {
+    apiUrl = 'https://127.0.0.1:8000/api/v1/products/all'
+
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        resp = response.json();
+    })
+
+    var products = [resp]
+
+    displayProducts(products)
+
+}
+
+// Test display function
+function test() {
+    var t = [
+        {"name":"Blue jeans", "price":128},
+        {"name":"Black t-shirt", "price":50}
+    ]
+    displayProducts(t)
+
+}
+
+
+
+function displayProducts(data) {
+    data.forEach(element => {
+        let new_prod = document.createElement('a');
+        new_prod.appendChild(document.createTextNode(element['name'], element['price']))
+    });
+
+}
+
+
+</script>
 
 </body>
 </html>

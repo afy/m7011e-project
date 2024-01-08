@@ -27,6 +27,20 @@ class CategoryTestCase(TestCase):
         self.assertEqual(shoes_categories, "Shoes")
         self.assertEqual(books_categories, "Books")
 
+    def test_Subcategories_Exists(self):
+        shoes_categories = fetch_Specific_Category_Object("Shoes")
+        books_categories = fetch_Specific_Category_Object("Books")
+
+        subcategory_Insert_Query("Shoes", "Clothes")
+        subcategory_Insert_Query("Books", "Pockets")
+
+        clothes_categories = fetch_Specific_Category("Clothes")[0]['name']
+        pockets_categories = fetch_Specific_Category("Pockets")[0]['name']  
+
+        self.assertEqual(clothes_categories, "Clothes")
+        self.assertEqual(pockets_categories, "Pockets")
+        
+
 class ProductTestCase(TestCase):
     def setUp(self):
         category_Insert_Query("Shoes")

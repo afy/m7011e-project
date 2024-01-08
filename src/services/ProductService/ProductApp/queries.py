@@ -14,10 +14,15 @@ def event_Delete_Query(event_name):
 
 def fetch_All_Events():
     b = Special_Sale.objects.all().values()
+    return b
 
 def fetch_Specific_Event(event_name):
     b = Special_Sale.objects.filter(name=event_name).values()
     return b
+
+def update_Event(name, newname):
+    Special_Sale.objects.filter(name=name).update(name=newname)
+    
 
 
 # CRUD category
@@ -43,6 +48,7 @@ def category_Delete_Query(category_id):
 
 def fetch_All_Categories():
     b = Category.objects.all().values()
+    return b
 
 def fetch_Specific_Category(category_name):
     b = Category.objects.filter(name=category_name).values()
@@ -51,6 +57,9 @@ def fetch_Specific_Category(category_name):
 def fetch_Specific_Category_Object(category_name):
     b = Category.objects.get(name=category_name)
     return b
+
+def update_Category(name, newname):
+        Category.objects.filter(name=name).update(name=newname)
 
 # CRUD product
 
@@ -68,6 +77,7 @@ def product_Delete_Query(product_id):
 
 def fetch_All_Products():
     b = Product.objects.all().values()
+    return b
 
 
 def fetch_Specific_Product(product_name):

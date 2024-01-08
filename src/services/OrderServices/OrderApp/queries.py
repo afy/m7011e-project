@@ -21,8 +21,8 @@ def insert_Order_Item(order_id, price, count, product_id):
 
 # fetch the customers order from the database with items
 
-def fetch_Specific_Order_With_Items(order_name):
-    order_instance = Order.objects.get(pk=order_name)
+def fetch_Specific_Order_With_Items(order_id):
+    order_instance = Order.objects.get(pk=order_id)
 
     order_item_instance = Order_item.objects.filter(order_id=order_instance).values()
 
@@ -30,8 +30,8 @@ def fetch_Specific_Order_With_Items(order_name):
 
 # fetch the customers order from the database without items
 
-def fetch_Specific_Order(order_name):
-    order_instance = Order.objects.filter(pk=order_name).values()
+def fetch_Specific_Order(order_id):
+    order_instance = Order.objects.filter(pk=order_id).values()
 
     return order_instance
 
@@ -45,9 +45,23 @@ def fetch_All_Orders():
     
     return order_instance
 
+#udate price in order_item
+
+def delete_Order(order_id):
+    b = Order.objects.get(id=order_id)
+    b.delete()
+
+
+def delete_Order_Item(order_item_id):
+    b = Order_item.objects.get(id=order_item_id)
+    b.delete()
+
+def update_Price_Order_Item(order_item_id, price):
+    Order_item.objects.filter(pk=order_item_id).update(price=price)
+
 #update payment status
 
-def update_Payment_status(order_id, payment_status):
+def update_Payment_Status(order_id, payment_status):
     Order.objects.filter(pk=order_id).update(payment_status=payment_status)
     
     b = Order.objects.filter(pk=order_id).values()

@@ -24,6 +24,6 @@ class OrderTestCase(TestCase):
         self.assertEqual(order_id_2, 4)
         
     def test_change_payment_status(self):
-        update_Payment_status(1,0)
+        update_Payment_Status(1,0)
         order_id_1 = fetch_Specific_Order(1)[0]['payment_status']
         self.assertEqual(order_id_1,0)

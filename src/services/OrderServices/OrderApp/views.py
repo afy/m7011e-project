@@ -8,6 +8,8 @@ from rest_framework.response import Response
 #from .APIGatewayServer import ApiGatewayServer
 from .queries import *
 import time
+from django.http import HttpResponse
+from django.template import loader
 
 
 import sys, os
@@ -54,5 +56,11 @@ lookup.add("update_Price_Order_Item", update_Price_Order_Item, ["user"],  [("ord
 
 # Create your views here.
 
+
 def home(request):
-    return 0
+  
+  orders = fetch_All_Orders()
+  order_items= fetch_All_Order_Items()
+  template = loader.get_template('myfirst.html')
+  return render(request, 'myfirst.html', {'orders': orders, 'order_items':order_items})
+

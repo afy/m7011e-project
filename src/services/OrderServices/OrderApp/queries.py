@@ -35,11 +35,27 @@ def fetch_Specific_Order(order_id):
 
     return order_instance
 
+#fetch all orders
+
+def fetch_All_Orders_For_User(user_id):
+    order_instance = Order.objects.filter(user_id=user_id).values()
+
+    print(order_instance)
+    
+    return order_instance
+
 
 #fetch all orders
 
 def fetch_All_Orders():
-    order_instance = Order.objects.all()
+    order_instance = Order.objects.all().values()
+
+    print(order_instance)
+    
+    return order_instance
+
+def fetch_All_Order_Items():
+    order_instance = Order_item.objects.all().values()
 
     print(order_instance)
     

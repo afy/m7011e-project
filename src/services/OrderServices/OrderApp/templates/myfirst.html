@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>OrderList</h1>
+
+
+{% for order in orders %}
+<li>Order ID: {{ order.id }}, Customer: {{ order.user_id }}, 
+    Payment Status: {{ order.payment_status }},
+     Order Date: {{order.order_date}},Total: {{ order.total_price }}, Payment Method: {{order.payment_method}}</li>
+    <br><b>Items</b> 
+    {%for order_item in order_items%}
+    <br> 
+    {% if order.id == order_item.order_id_id %}
+    Product id: {{order_item.product_id}},
+     Price: {{order_item.price}}, Count: {{order_item.count}}
+    </br>
+    {%endif%}
+    {%endfor%}
+</br>     
+{% empty %}
+<li>No orders available.</li>
+{% endfor %}
+
+</body>
+</html>

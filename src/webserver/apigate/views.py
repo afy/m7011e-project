@@ -51,3 +51,25 @@ def handle_user_crud(request, id):
         case "DELETE": response = protocol.not_implemented_response
         case _       : response = protocol.undefined_logic_response
     return JsonResponse(response)
+
+# Handle order table CRUD
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
+def handle_order_crud(request, id):
+    user_id=api_gateway_client.call("auth","token_auth",request.data)
+    match(request.method):
+        case    "GET": response = api_gateway_client.call("order", "fetch_Specific_Order",
+                                                           {"id": user_id}, 
+                                                           None, None)
+        case   "POST": response = api_gateway_client.call("order", "update_Payment_Status", 
+                                                           {"id": id, "post-data": request.data}, 
+                                                           None, None)
+        case    "PUT": response = api_gateway_client.call("order", "insert_Order",
+                                                           {"id":id, "put-data": request.data}, 
+                                                           None, None)
+        case "DELETE": response = api_gateway_client.call("order", "delete_Order", 
+                                                           {"order_id":id}, 
+                                                           None, None)
+        case _       : response = protocol.undefined_logic_response
+    return JsonResponse(response)
+
+#

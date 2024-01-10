@@ -36,14 +36,15 @@ class PikaServerLookup:
         
         # Verify groups return T/F
         req = self.lookup[func_name]["required-groups"]
-        if req == None: return True
+        if req == None or req == []: return True
         if not "user-validation" in body or body["user-validation"] == None: return False
         if not "groups" in body["user-validation"]: return False 
 
+        found_any = False
         for req_group in req:
-            if not req_group in body["user-validation"]["groups"]:
-                return False
-        return True
+            if req_group in body["user-validation"]["groups"]:
+                found_any = True
+        return found_any
 
 
     # Check if param requirements pass

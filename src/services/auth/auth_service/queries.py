@@ -97,7 +97,8 @@ def updateUser(user_id, password, new_password):
 def tokenAuthentication(token_key):
     try :
         token = Token.objects.get(key=token_key)
-        return True
+        group = getUserGroup(user_id=token.user_id)
+        return {"groups":group}
     
     except Token.DoesNotExist:
         raise PermissionDenied({"message: Invalid token"})

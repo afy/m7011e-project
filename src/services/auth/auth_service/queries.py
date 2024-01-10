@@ -34,14 +34,17 @@ def createUser(id, username, password, email):
 def login(username, password):
     user = authenticate(username=username, password=password)
 
+    print("in login : ", username, password)
+
     if user is not None:
+        print("Entered if statement")
         user_id = User.objects.get(username=username).pk
         token = Token.objects.get(user_id=user_id)
         group = getUserGroup(user_id=user_id)
-        return {"Token":token.key, "Group":group}
+        return {"token":token.key, "groups":str(group)}
 
     else:
-        return None
+        return "could not login"
     
 
 

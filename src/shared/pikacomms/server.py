@@ -123,7 +123,8 @@ class PikaServer:
         
         if response == None:
             try:
-                return_value = self.lookup.get_func(body["function"])(body)
+                print(body["function"], body)
+                return_value = self.lookup.get_func(body["function"])(**body["params"])
                 response = protocol.parseToNet({"return": return_value}, "func-return", None, None)
             except Exception as e:
                 self.log(f"In message handler: Something went wrong during function call.\n{e}")

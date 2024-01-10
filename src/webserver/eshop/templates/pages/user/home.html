@@ -20,6 +20,9 @@ d = [
     {"name": "Weekly sales", "id": "sale-2"}
 ];
 
+console.log(localStorage.getItem('Token'))
+
+
 d.forEach(el => {
     let ne = document.createElement('a');
     ne.appendChild(document.createTextNode(el['name']));

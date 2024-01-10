@@ -11,6 +11,15 @@ from shared.pikacomms import protocol
 # Communicate with microservices
 api_gateway_client = PikaClient(name="API Gateway", log_params=True, timeout=5)
 
+
+def validateCall(req):
+    if "token" in req.data and req.data["token"]:
+        resp = api_gateway_client.call("auth", "token-auth", {"token": req.data["token"]}, None)
+
+        return {"id": None, "groups": resp["groups"]} if "groups" in resp else {"id": None, "groups": resp['']}
+    else:
+        return {"id": None, "groups": ['']}
+
 # Handle Product table CRUD
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def handle_product_crud(request, id):
@@ -47,7 +56,7 @@ def handle_user_crud(request, id=None):
     print("Handle user crud request.data: ", request.data)
     match(request.method):
         case    "GET": response = protocol.not_implemented_response
-        case   "POST": response = api_gateway_client.call("auth", "login", request.data, {}, None)
+        case   "POST": response = api_gateway_client.call("auth", "login", request.data, validateCall(request), None)
         case    "PUT": response = protocol.not_implemented_response
         case "DELETE": response = protocol.not_implemented_response
         case _       : response = "login response"

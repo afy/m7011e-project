@@ -34,24 +34,28 @@ function login(username, password) {
     headers: { 'Content-Type': 'application/json' }
   })
 
-  .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+  .then((response) => response.json())
+  .then((resp) => {
+        token = resp['params']['return']['token']
+        groups = resp['params']['return']['groups']
 
-        console.log("response: ", response)
-        resp = response.json();
+        console.log(token, groups)
 
-        localStorage.setItem('Token', resp['Token']);
-        localStorage.setItem('Group', resp['Group']);
+        localStorage.setItem('Token', token);
 
-        switch(resp['Token']) {
-          case 'User':
-            location.replace('https://127.0.0.1:8000/')
-          case 'Admin':
-            location.replace('https://127.0.0.1:8000/admin')
-          case 'Superuser':
-            location.replace('https://127.0.0.1:8000/superuser')
+        switch(groups) {
+
+          case 'user':
+            location.replace('http://127.0.0.1:8000/')
+            break;
+          case 'admin':
+            location.replace('http://127.0.0.1:8000/admin')
+            break;
+          case 'superuser':
+            location.replace('http://127.0.0.1:8000/superuser')
+            break;
+
+          default: console.log("Error")
         }
         
     })

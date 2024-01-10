@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html>
-<body>
+<body onload="verifyToken()">
 
 <div class="navbar">
     {% include "components/navbars/admin_navbar.html" %}
 </div>
 
 <h1> Admin Home Page</h1>
+
+
+<script>
+
+function verifyToken() {
+    apiUrl = 'http://127.0.0.1:8000/api/v1/user'
+}
+
+</script>
 
 </body>
 </html>

@@ -8,16 +8,57 @@
 
 <h1>Create acccount page</h1>
 
-<form action="" method="POST">
-    {% csrf_token %}
     <label for="email">Email:</label>
     <input type="text" id="email" name="email"><br><br>
     <label for="username">Username:</label>
     <input type="text" id="username" name="username"><br><br>
     <label for="password">Password:</label>
     <input type="text" id="password" name="password"><br><br>
-    <input type="submit" value="Submit">
-  </form>
+    <button onclick="createAccount(document.getElementById('email').value, 
+                                   document.getElementById('username').value, 
+                                   document.getElementById('password').value)">
+    Create account
+    </button>
+
+<script>
+
+function createAccount(email, username, password) {
+  console.log(email, username, password)
+
+  apiUrl = 'https://127.0.0.1:8000/api/v1/user'
+  
+  fetch(apiUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      em: email,
+      pass: password
+    }),
+    headers: { 'Content-Type': 'application/json' }
+  })
+
+  .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        resp = response.json();
+
+        localStorage.setItem('Token', resp['Token']);
+        localStorage.setItem('Group', resp['Group']);
+
+        switch(resp['Token']) {
+          case 'User':
+            location.replace('https://127.0.0.1:8000/')
+          case 'Admin':
+            location.replace('https://127.0.0.1:8000/admin')
+          case 'Superuser':
+            location.replace('https://127.0.0.1:8000/superuser')
+        }
+
+    })
+
+}
+
+</script>
 
 </body>
 </html>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<body onload="test">
+<body onload="test()">
 
 <div class="navbar">
     {% include "components/navbars/navbar.html" %}
@@ -8,6 +8,10 @@
 
 <h1>Hello World!</h1>
 <p>Product page</p>
+
+<div id="div1">
+
+</div>
 
 
 <script>
@@ -42,9 +46,16 @@ function test() {
 
 
 function displayProducts(data) {
+    console.log('in displayproducts')
+
+
     data.forEach(element => {
-        let new_prod = document.createElement('a');
-        new_prod.appendChild(document.createTextNode(element['name'], element['price']))
+        let new_div = document.createElement('a');
+        let new_cont = document.createTextNode(element['name'] + " Price: " + element['price'] + "  ")
+        new_div.appendChild(new_cont)
+        const curr_div = document.getElementById("div1")
+        document.body.insertBefore(new_div, curr_div)
+        // new_prod.appendChild(document.createTextNode(element['name'], element['price']))
     });
 
 }

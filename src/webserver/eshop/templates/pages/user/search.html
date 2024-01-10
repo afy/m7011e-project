@@ -21,7 +21,7 @@ function searchProducts() {
 
     // Request data via API
     // note: Change all instances of 'd' to 'products'
-    apiUrl = 'https://127.0.0.1:8000/api/v1/products/' + in_search
+    apiUrl = 'https://127.0.0.1:8000/api/v1/products/' + in_search.value
     
     fetch(apiUrl)
       .then(response => {

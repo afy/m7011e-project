@@ -43,11 +43,15 @@ def handle_category_crud(request, id):
 
 # Handle User table CRUD
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
-def handle_user_crud(request, id):
+def handle_user_crud(request, id=None):
+    print("Handle user crud request.data: ", request.data)
     match(request.method):
         case    "GET": response = protocol.not_implemented_response
-        case   "POST": response = protocol.not_implemented_response
+        case   "POST": response = api_gateway_client.call("auth", "login", request.data, {}, None)
         case    "PUT": response = protocol.not_implemented_response
         case "DELETE": response = protocol.not_implemented_response
-        case _       : response = protocol.undefined_logic_response
+        case _       : response = "login response"
+
+
+    print(response)
     return JsonResponse(response)

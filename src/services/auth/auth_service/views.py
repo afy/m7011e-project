@@ -22,6 +22,7 @@ lookup.add("delete-user", deleteUser, ['admin', 'superuser'],
 lookup.add("login", login, ['', 'user', 'admin', 'superuser'], 
            [('username', str), ('password', str)])
 
+
 lookup.add("token-auth", tokenAuthentication, ['', 'user', 'admin', 'superuser'], 
            [('token_key', str)])
 

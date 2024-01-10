@@ -8,14 +8,58 @@
 
 <h1>Login page</h1>
 
-<form action="" method="POST">
-    {% csrf_token %}
-    <label for="email">Email:</label>
-    <input type="text" id="email" name="email"><br><br>
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username"><br><br>
     <label for="password">Password:</label>
     <input type="text" id="password" name="password"><br><br>
-    <input type="submit" value="Submit">
-  </form>
+    <button onclick = "login(document.getElementById('username').value, document.getElementById('password').value)">
+      Login
+    </button>
+
+
+
+<script>
+
+function login(username, password) {
+  console.log(username, password)
+
+  apiUrl = 'http://127.0.0.1:8000/api/v1/user'
+  
+  fetch(apiUrl, {
+    method: "POST",
+    body: JSON.stringify({
+      username: username,
+      password: password
+    }),
+    headers: { 'Content-Type': 'application/json' }
+  })
+
+  .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        console.log("response: ", response)
+        resp = response.json();
+
+        localStorage.setItem('Token', resp['Token']);
+        localStorage.setItem('Group', resp['Group']);
+
+        switch(resp['Token']) {
+          case 'User':
+            location.replace('https://127.0.0.1:8000/')
+          case 'Admin':
+            location.replace('https://127.0.0.1:8000/admin')
+          case 'Superuser':
+            location.replace('https://127.0.0.1:8000/superuser')
+        }
+        
+    })
+    
+
+}
+
+</script>
 
 </body>
 </html>

@@ -6,21 +6,26 @@ import requests
 # Misc
 def login(request):
     if request.method == "POST":
-
+        """
         email = request.POST.get('email')
         password = request.POST.get('password')
 
         response = requests.post('https://127.0.0.1:8000/api/v1/user', data=[email, password])
         token = response['Token']
         group = response['Group']
+
+        return redirect('pages/' + group  + '/home.html', token=token, group=group)
+
         
-        return redirect('pages/user/home.html', token=token, group=group)
+        """
+
     
     return render(request, 'pages/login.html')
 
 
 def createAccount(request):
-    if request.method == 'POST':
+    """
+        if request.method == 'POST':
         email = request.POST.get('email')
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -29,7 +34,9 @@ def createAccount(request):
         token = response['Token']
         group = response['Group']
 
-        return redirect('pages/user/home.html', token=token, group=group)
+        return redirect('pages/' + group  + '/home.html', token=token, group=group)
+    """
+
     
     return render(request, 'pages/create_acc.html')
 

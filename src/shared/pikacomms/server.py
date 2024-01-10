@@ -116,6 +116,8 @@ class PikaServer:
 
         elif not self.lookup.required_groups_met(body["function"], body):
             self.log(f"In message handler: Required groups are not met")
+            print("body received in pikaserver : ", body)
+            print("function recived in pikaserver: ", body["function"])
             response = protocol.parseToError("Required groups not met")
         
         if response == None:

@@ -32,7 +32,7 @@ class PikaClient:
             self.log("Response recieved!")
 
 
-    def call(self, key:str, func:str, params:dict, userv:dict, error:str) -> None:  
+    def call(self, key:str, func:str, params:dict, userv:dict, error:str = None) -> None:  
         log_msg = f"Sent func {func} with {params} to " if self.log_params else "Sent data to "
         log_msg += f"{key}"
         self.log(log_msg)

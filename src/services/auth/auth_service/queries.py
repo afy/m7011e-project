@@ -101,10 +101,10 @@ def tokenAuthentication(token_key):
     try :
         token = Token.objects.get(key=token_key)
         group = getUserGroup(user_id=token.user_id)
-        return {"groups":group}
+        return {"valid":True, "groups":group.name}
     
     except Token.DoesNotExist:
-        raise PermissionDenied({"message: Invalid token"})
+        return {"valid": False, "groups":""}
     
 
 # Creates a token for an existing user

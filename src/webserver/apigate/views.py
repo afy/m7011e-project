@@ -16,7 +16,7 @@ def validateCall(req):
     if "token" in req.data and req.data["token"]:
         resp = api_gateway_client.call("auth", "token-auth", {"token": req.data["token"]}, None)
 
-        return {"id": None, "groups": resp["groups"]} if "groups" in resp else {"id": None, "groups": resp['']}
+        return {"id": None, "groups": resp["groups"]} if "groups" in resp else {"id": None, "groups": ['']}
     else:
         return {"id": None, "groups": ['']}
 
@@ -59,8 +59,13 @@ def handle_user_crud(request, id=None):
         case   "POST": response = api_gateway_client.call("auth", "login", request.data, validateCall(request), None)
         case    "PUT": response = protocol.not_implemented_response
         case "DELETE": response = protocol.not_implemented_response
-        case _       : response = "login response"
+        case _       : response = protocol.undefined_logic_response
 
 
     print(response)
     return JsonResponse(response)
+
+@api_view(["POST"])
+def verify_token(request):
+    resp = api_gateway_client.call("auth", "token-auth", request.data, validateCall(request), None)
+    return JsonResponse(resp)

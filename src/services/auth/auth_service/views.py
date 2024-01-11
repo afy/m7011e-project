@@ -4,6 +4,8 @@ import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../')))
 from shared.pikacomms.server import PikaServer, PikaServerLookup
 
+
+#createUser(6, "klas", "klaspassword", "klas@hotmail.com")
 lookup = PikaServerLookup() 
 
 # User table CRUD
@@ -21,6 +23,7 @@ lookup.add("delete-user", deleteUser, ['admin', 'superuser'],
 # Other
 lookup.add("login", login, ['', 'user', 'admin', 'superuser'], 
            [('username', str), ('password', str)])
+
 
 lookup.add("token-auth", tokenAuthentication, ['', 'user', 'admin', 'superuser'], 
            [('token_key', str)])

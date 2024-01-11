@@ -27,6 +27,9 @@ lookup.add(
 lookup.add("delete-product", product_Delete_Query, ["admin"],
     [("product_id", int)])
 
+lookup.add("get-product", fetch_Specific_Product, [], 
+           [("product_name", str)])
+
 # Category
 # Special_sale
 # Product_discount

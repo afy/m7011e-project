@@ -20,6 +20,25 @@ function searchProducts() {
     let sb = document.getElementById('in_search');
 
     // Request data via API
+    // note: Change all instances of 'd' to 'products'
+    if (in_search.value == null || in_search.value == "") {return}
+    apiUrl = 'http://127.0.0.1:8000/api/v1/product/'
+
+    console.log(typeof(in_search.value))
+
+    fetch(apiUrl, {
+        method: "POST",
+        body: JSON.stringify({
+          product_name: in_search.value
+        }), headers: { 'Content-Type': 'application/json' 
+        }}).then((response) => response.json()).then((resp) => {
+        console.log(resp)
+    })
+
+    //var products = [resp]
+
+
+    // Example
     var d = [
         {"name": "sneakers", "id": 5},
         {"name": "sandals", "id": 3}

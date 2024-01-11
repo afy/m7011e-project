@@ -1,4 +1,6 @@
 from ProductApp.models import Special_Sale, Product, Category, Product_Discount
+from django.http import JsonResponse
+
 
 
 # CRUD event
@@ -70,9 +72,16 @@ def fetch_All_Products():
     b = Product.objects.all().values()
 
 
+from django.core import serializers
 def fetch_Specific_Product(product_name):
-    b = Product.objects.filter(name=product_name).values()
-    return b
+    d = {
+        "name":Product.objects.get(name=product_name).name,
+        "category":Product.objects.get(name=product_name).category.name,
+        "description":Product.objects.get(name=product_name).description,
+        "price":Product.objects.get(name=product_name).price,
+        "stock":Product.objects.get(name=product_name).stock
+    }
+    return d
 
 #update products
 

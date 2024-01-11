@@ -11,22 +11,27 @@ from shared.pikacomms import protocol
 # Communicate with microservices
 api_gateway_client = PikaClient(name="API Gateway", log_params=True, timeout=5)
 
+
+def validateCall(req):
+    if "token" in req.data and req.data["token"]:
+        resp = api_gateway_client.call("auth", "token-auth", {"token": req.data["token"]}, None)
+
+        return {"id": None, "groups": resp["groups"]} if "groups" in resp else {"id": None, "groups": ['']}
+    else:
+        return {"id": None, "groups": ['']}
+
 # Handle Product table CRUD
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
-def handle_product_crud(request, id):
+def handle_product_crud(request):
     match(request.method):
         case    "GET": response = api_gateway_client.call("prod", "get-product",
-                                                           {"id": id}, 
-                                                           None, None)
-        case   "POST": response = api_gateway_client.call("prod", "update-product", 
-                                                           {"id": id, "post-data": request.data}, 
-                                                           None, None)
+                                                           request.data, validateCall(request))
+        case   "POST": response = api_gateway_client.call("prod", "get-product", 
+                                                           request.data, validateCall(request))
         case    "PUT": response = api_gateway_client.call("prod", "create-product",
-                                                           {"id":id, "put-data": request.data}, 
-                                                           None, None)
+                                                           request.data, validateCall(request))
         case "DELETE": response = api_gateway_client.call("prod", "delete-product", 
-                                                           {"product_id":id}, 
-                                                           None, None)
+                                                           request.data, validateCall(request))
         case _       : response = protocol.undefined_logic_response
     return JsonResponse(response)
 
@@ -43,11 +48,20 @@ def handle_category_crud(request, id):
 
 # Handle User table CRUD
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
-def handle_user_crud(request, id):
+def handle_user_crud(request, id=None):
+    print("Handle user crud request.data: ", request.data)
     match(request.method):
         case    "GET": response = protocol.not_implemented_response
-        case   "POST": response = protocol.not_implemented_response
+        case   "POST": response = api_gateway_client.call("auth", "login", request.data, validateCall(request), None)
         case    "PUT": response = protocol.not_implemented_response
         case "DELETE": response = protocol.not_implemented_response
         case _       : response = protocol.undefined_logic_response
+
+
+    print(response)
     return JsonResponse(response)
+
+@api_view(["POST"])
+def verify_token(request):
+    resp = api_gateway_client.call("auth", "token-auth", request.data, validateCall(request), None)
+    return JsonResponse(resp)

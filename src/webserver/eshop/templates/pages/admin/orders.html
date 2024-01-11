@@ -1,12 +1,50 @@
 <!DOCTYPE html>
 <html>
-<body>
+<body onload="getAllOrders()">
 
 <div class="navbar">
     {% include "components/navbars/admin_navbar.html" %}
 </div>
 
 <p>Orders</p>
+
+
+<script>
+
+function getAllOrders() {
+    apiUrl = 'https://127.0.0.1:8000/api/v1/orders/all'
+
+    fetch(apiUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        resp = response.json();
+    })
+
+    var orders = [resp]
+
+    displayOrders(orders)
+}
+
+
+function displayOrders(data) {
+    console.log('in displayOrders')
+
+    // Add onclick delete button that sends delete req and deletes the order
+
+    data.forEach(element => {
+        let new_div = document.createElement('a');
+        let new_cont = document.createTextNode(element['name'] + " Price: " + element['price'] + "  ")
+        new_div.appendChild(new_cont)
+        const curr_div = document.getElementById("div1")
+        document.body.insertBefore(new_div, curr_div)
+    });
+
+}
+
+
+</script>
 
 </body>
 </html>

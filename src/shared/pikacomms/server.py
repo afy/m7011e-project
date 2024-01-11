@@ -36,14 +36,15 @@ class PikaServerLookup:
         
         # Verify groups return T/F
         req = self.lookup[func_name]["required-groups"]
-        if req == None: return True
+        if req == None or req == []: return True
         if not "user-validation" in body or body["user-validation"] == None: return False
         if not "groups" in body["user-validation"]: return False 
 
+        found_any = False
         for req_group in req:
-            if not req_group in body["user-validation"]["groups"]:
-                return False
-        return True
+            if req_group in body["user-validation"]["groups"]:
+                found_any = True
+        return found_any
 
 
     # Check if param requirements pass
@@ -116,11 +117,14 @@ class PikaServer:
 
         elif not self.lookup.required_groups_met(body["function"], body):
             self.log(f"In message handler: Required groups are not met")
+            print("body received in pikaserver : ", body)
+            print("function recived in pikaserver: ", body["function"])
             response = protocol.parseToError("Required groups not met")
         
         if response == None:
             try:
-                return_value = self.lookup.get_func(body["function"])(body)
+                print(body["function"], body)
+                return_value = self.lookup.get_func(body["function"])(**body["params"])
                 response = protocol.parseToNet({"return": return_value}, "func-return", None, None)
             except Exception as e:
                 self.log(f"In message handler: Something went wrong during function call.\n{e}")

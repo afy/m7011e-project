@@ -1,3 +1,20 @@
+<script>
+    window.onload = function checkCookie() {
+        token = localStorage.getItem("Token")
+        fetch("http://127.0.0.1:8000/api/v1/verify-token/", {
+        method: "POST",
+        body: JSON.stringify({
+          token_key: token
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      }).then((response) => response.json()) .then((resp) => {
+            if (!resp.params.return.valid || resp.params.return.groups != "admin") {
+                location.replace("/login")
+            }
+        })
+    }
+</script>
+
 <div style="overflow: hidden;">
     <div style="text-align: left; float: left;">
         <b>Eshop Administrator Panel</b>
